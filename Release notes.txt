@@ -1,3 +1,5 @@
+5.2.1-rc.1:
+    Added Rotation property to Get-DisplayInfo output to show the current display rotation (None, Rotate90, Rotate180, Rotate270).
 5.2.1:
     Fixed issue where the EDID data would be null unless the UID assigned to the display was exactly 4 digits long.
 5.2.0:

@@ -36,19 +36,38 @@ $FileList = (Get-ChildItem -LiteralPath $OutputDir -File -Recurse | ForEach-Obje
     "'$($_.FullName.Replace("$OutputDir\", ''))'"
 }) -join ','
 $ReleaseNotes = Get-Content -LiteralPath "$PSScriptRoot\Release notes.txt" -Raw
-$Version = $ReleaseNotes.Split(':')[0]
+$VersionString = $ReleaseNotes.Split(':')[0].Trim()
+
+# Separar versão e prerelease (se houver)
+$ModuleVersion = $VersionString
+$Prerelease = ''
+if ($VersionString -match '^(\d+\.\d+\.\d+)(?:-(.+))?$') {
+    $ModuleVersion = $Matches[1]
+    if ($Matches[2]) {
+        $Prerelease = $Matches[2]
+    }
+}
 
 ((Get-Content -LiteralPath "$PSScriptRoot\ModuleManifest.psd1" -Raw) -replace '{(?=[^\d])','{{' -replace '(?<!\d)}','}}') -f @(
-    "'$Version'"
+    "'$ModuleVersion'"
     $TypeList
     $FormatList
     $CmdletsToExport
     $FileList
     $ReleaseNotes
 ) | Set-Content -LiteralPath "$OutputDir\$ModuleName.psd1" -Force
+
+# Se houver prerelease, adicionar ao manifesto
+if ($Prerelease) {
+    $ManifestContent = Get-Content -LiteralPath "$OutputDir\$ModuleName.psd1" -Raw
+    # Adicionar Prerelease dentro do PSData
+    $ManifestContent = $ManifestContent -replace '(PSData\s*=\s*@\s*\{)', "`$1`r`n             Prerelease = '$Prerelease'"
+    Set-Content -LiteralPath "$OutputDir\$ModuleName.psd1" -Value $ManifestContent -Force
+}
 #endregion
 
-$ReleaseDir = Join-Path -Path $PSScriptRoot -ChildPath "Releases\$ModuleName\$Version"
+$ReleaseDir = Join-Path -Path $PSScriptRoot -ChildPath "Releases\$ModuleName\$VersionString"
 Get-Item -LiteralPath $ReleaseDir -Force -ErrorAction Ignore | Remove-Item -Recurse -Force -ErrorAction Stop
 $null = New-Item -Path $ReleaseDir -ItemType Directory -Force
 Get-ChildItem -LiteralPath $OutputDir | Copy-Item -Destination $ReleaseDir -Force -Recurse -Container -ErrorAction Stop
+

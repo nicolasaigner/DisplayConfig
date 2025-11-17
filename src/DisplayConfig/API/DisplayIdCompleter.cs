@@ -33,7 +33,8 @@ namespace MartinGC94.DisplayConfig.API
                 DISPLAYCONFIG_TARGET_DEVICE_NAME displayInfo = config.GetDeviceNameInfo(index);
                 string displayName = string.IsNullOrEmpty(displayInfo.monitorFriendlyDeviceName) ? "Unknown Display" : displayInfo.monitorFriendlyDeviceName;
                 string listItemText = $"{displayIdAsString} {displayName} ({(ConnectionType)displayInfo.outputTechnology})";
-                string toolTip = $"{displayName} ({(ConnectionType)displayInfo.outputTechnology})";
+                string displayRotation = config.GetDisplayRotation(displayId).ToString();
+                string toolTip = $"{displayName} ({(ConnectionType)displayInfo.outputTechnology}) - Rotation: {displayRotation}";
 
                 yield return new CompletionResult(displayIdAsString, listItemText, CompletionResultType.ParameterValue, toolTip);
             }

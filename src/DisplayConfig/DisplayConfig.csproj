@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh.exe -NoProfile -Command &quot;$(ProjectDir)..\..\PostBuild.ps1 -OutputFile $(TargetPath)&quot;" />
+    <Exec Command="pwsh.exe -NoProfile -Command &quot;C:\Users\Nicolas\SSD_1TB\PROJETOS\DisplayConfig\PostBuild.ps1 -OutputFile $(TargetPath)&quot;" />
   </Target>
 
   <ItemGroup>

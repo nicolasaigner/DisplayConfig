@@ -51,6 +51,12 @@
                   <Alignment>right</Alignment>
                </TableColumnHeader>
 
+               <TableColumnHeader>
+                  <Label>Rotation</Label>
+                  <Width>10</Width>
+                  <Alignment>right</Alignment>
+               </TableColumnHeader>
+
             </TableHeaders>
             <TableRowEntries>
                <TableRowEntry>
@@ -82,6 +88,10 @@
 
                      <TableColumnItem>
                         <PropertyName>ConnectionType</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>Rotation</PropertyName>
                      </TableColumnItem>
 
                   </TableColumnItems>
